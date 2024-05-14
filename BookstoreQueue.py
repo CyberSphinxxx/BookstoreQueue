@@ -1,63 +1,40 @@
-class Queue:
-    def __init__(self):
-        self.items = []
+from collections import deque
 
-    def add_to_queue(self, item):
-        self.items.insert(0, item)
+def enter_bookstore(queue):
+    num_clients = int(input("Enter number of persons to buy: "))
+    i = 1
+    while i <= num_clients:
+        client_name = input(f"Enter the name of person {i}: ")
+        queue.append(client_name)
+        i += 1
+    print("\nInitial queue:", queue)
 
-    def remove_from_queue(self):
-        if not self.is_queue_empty():
-            return self.items.pop()
-        return None
-
-    def is_queue_empty(self):
-        return len(self.items) == 0
-
-    def queue_size(self):
-        return len(self.items)
-
-
-class Bookstore:
-    def __init__(self):
-        self.queue = Queue()
-
-    def come_inside(self, client_name):
-        print(f"{client_name} comes into the bookstore.")
-        self.queue.add_to_queue(client_name)
-
-    def buy_a_book(self):
-        if not self.queue.is_queue_empty():
-            client_name = self.queue.remove_from_queue()
-            print(f"{client_name} buys a book.")
-        else:
-            print("There's no one in the store to buy a book.")
-
+def buy_book(queue):
+    if not queue:
+        print("No one is in the queue.")
+        return False
+    current_client = queue.popleft()
+    print(f"{current_client} is buying books.")
+    return True
 
 def main():
-    bookstore = Bookstore()
-
+    queue = deque()
     while True:
         print("\nWhat would you like to do?")
         print("1. Enter the bookstore")
         print("2. Buy a book")
         print("3. Leave")
-
-        choice = input("\nWhat would you like to do? Enter the number: ")
-
+        choice = input("Enter your choice: ")
         if choice == "1":
-            client_name = input("What's your name? ")
-            bookstore.come_inside(client_name)
-
+            enter_bookstore(queue)
         elif choice == "2":
-            bookstore.buy_a_book()
-
+            while buy_book(queue):
+                pass
         elif choice == "3":
-            print("You are now leaving. Goodbye!")
+            print("\nExiting the bookstore.")
             break
-
         else:
-            print("Oops! That's not a valid option. Please try again.")
-
+            print("Invalid choice. Please enter a valid option.")
 
 if __name__ == "__main__":
     main()
